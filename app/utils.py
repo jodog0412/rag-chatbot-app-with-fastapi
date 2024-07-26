@@ -7,3 +7,6 @@ def load_split_pdf_file(pdf_file: Annotated[any, "file format should be .pdf"]):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     data = loader.load_and_split(text_splitter)
     return data
+
+def format_docs(docs):
+        return "\n\n".join(doc.page_content for doc in docs)

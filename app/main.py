@@ -1,11 +1,11 @@
 from fastapi import FastAPI, File, UploadFile
-from load_data import load_split_pdf_file
 from langchain import hub
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough 
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
+from utils import load_split_pdf_file, format_docs
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -35,9 +35,6 @@ def llm_respond():
     db = Chroma(persist_directory="../data", embedding_function=embedding)
     retriever = db.as_retriever()
     prompt =  hub.pull("rlm/rag-prompt")
-    def format_docs(docs):
-        return "\n\n".join(doc.page_content for doc in docs)
-    
     rag_chain = (
         {"context": retriever | format_docs, "question": RunnablePassthrough()}
         | prompt
