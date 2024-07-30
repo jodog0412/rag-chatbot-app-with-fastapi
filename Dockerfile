@@ -6,7 +6,7 @@ COPY . /code
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-ENV OPENAI_API_KEY "ENTER YOUR API KEY"
+ENV OPENAI_API_KEY ""
 
 WORKDIR /code/app
 
