@@ -6,6 +6,10 @@
     </head>
     <body>
         <h1>Chat With RAG chatbot</h1>
+        {% if message %}
+            <div class="message">{{ message }}</div>
+            <br></br>
+        {% endif %}
         <form action="" onsubmit="sendMessage(event)">
             <input type="text" id="messageText" autocomplete="off"/>
             <button>Send</button>

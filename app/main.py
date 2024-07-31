@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, Request, WebSocket
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from langchain_openai import ChatOpenAI
@@ -24,7 +24,7 @@ embedding = OpenAIEmbeddings()
 def return_homepage(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 
-@app.get("/")
+@app.post("/", response_class=HTMLResponse)
 def upload_pdf_file(request: Request, file: UploadFile = File(...)):
     try:
         contents = file.file.read()
@@ -36,15 +36,14 @@ def upload_pdf_file(request: Request, file: UploadFile = File(...)):
         file.file.close()
     if not file.filename.endswith('.pdf'):
         return {"message": "file format should be .pdf"}
+    
     docs = load_split_pdf_file(f'../data/{file.filename}')
     db = Chroma.from_documents(persist_directory="../data",
                                documents=docs, 
                                embedding=embedding)
-    return RedirectResponse(request=request, url='/chatting')
-
-@app.get("/chatting", response_class=HTMLResponse)
-def return_chatting_page(request: Request):
-    return templates.TemplateResponse(request=request, name="chatting.html")
+    return templates.TemplateResponse(request=request, 
+                                      name="chatting.html", 
+                                      context={"message": f"{file.filename} is succefully uploaded!"})
 
 @app.websocket("/chatting")
 async def websocket_chat(websocket: WebSocket):

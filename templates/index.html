@@ -11,11 +11,10 @@
   <body>
     <img src="{{ url_for('static', path='/dog.png') }}" class="icon" />
     <h3>Chat with RAG chatbot</h3>
-    <form action="/chatting" method="get" enctype="multipart/form-data">
-      <label for="file">submit pdf file</label> 
+    <form action="/" method="post" enctype="multipart/form-data">
       <input type="file" name="file" id="file" required />
       <br></br>
-      <input type="submit" value="Send" />
+      <input type="submit" value="Send"/>
     </form>
   </body>
 </html>
