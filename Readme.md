@@ -17,7 +17,7 @@ This project heavily referenced @AshishSinha5’s rag_api project.
     
     ```powershell
     git clone https://github.com/jodog0412/langchain-app-with-fastapi.git
-    cd fastapi-app-with-langchain
+    cd langchain-app-with-fastapi
     ```
     
 2. Create a virtual environment in your local directory and activate it.
