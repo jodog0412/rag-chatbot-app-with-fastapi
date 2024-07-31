@@ -3,7 +3,7 @@ This project is purposed to create RAG(retriever-augmented-generation) chatbot a
 
 If you upload `.pdf` file, RAG chatbot performs Q&A based on your document.
 
-This project heavily referenced @AshishSinha5’s rag_api project.
+This project heavily referenced `@AshishSinha5`’s [rag_api](https://github.com/AshishSinha5/rag_api/tree/main) project.
 
 <img src="https://github.com/user-attachments/assets/e502f8cb-a38f-463d-b918-3a445f3851f8" width=800 height=450>
 
