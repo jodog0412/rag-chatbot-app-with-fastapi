@@ -16,7 +16,7 @@ This project heavily referenced @AshishSinha5’s rag_api project.
 1. Clone this repository to your local machine.
     
     ```powershell
-    git clone https://github.com/jodog0412/fastapi-app-with-langchain.git
+    git clone https://github.com/jodog0412/langchain-app-with-fastapi.git
     cd fastapi-app-with-langchain
     ```
     
