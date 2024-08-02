@@ -7,4 +7,5 @@ chromadb
 pypdf
 openai
 fastapi
-pydantic-settings
+jinja2
+python-multipart
