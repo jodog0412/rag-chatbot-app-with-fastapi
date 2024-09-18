@@ -11,7 +11,8 @@
             <br></br>
         {% endif %}
         <form action="" onsubmit="sendMessage(event)">
-            <input type="text" id="messageText" autocomplete="off"/>
+            <textarea rows="7" cols="45" id="messageText" name="messageText" autocomplete="off"></textarea>
+            <p></p>
             <button>Send</button>
         </form>
         <ul id='messages'>

@@ -17,7 +17,7 @@ templates = Jinja2Templates(directory="../templates")
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="../static"), name="static")
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.5)
+llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.6)
 embedding = OpenAIEmbeddings()
 
 @app.get("/", response_class=HTMLResponse)
