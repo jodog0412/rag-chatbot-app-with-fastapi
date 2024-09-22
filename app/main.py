@@ -13,38 +13,43 @@ from utils import load_split_pdf_file, build_history_aware_retriever, build_qa_c
 from dotenv import load_dotenv
 
 load_dotenv()
-templates = Jinja2Templates(directory="../templates")
+docs_dir = '../documents'
+db_dir = '../db'
+
+templates = Jinja2Templates(directory = "../templates")
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="../static"), name="static")
+app.mount("/static", StaticFiles(directory = "../static"), name = "static")
 
-llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.6)
-embedding = OpenAIEmbeddings()
+llm = ChatOpenAI(model = "gpt-4o-mini", temperature = 0.6)
+# llm = ChatOpenAI(model = "gpt-4o", temperature = 0.6)
+embedding = OpenAIEmbeddings(model = "text-embedding-3-large",
+                             dimensions = 1536)
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class = HTMLResponse)
 def return_homepage(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(request = request, name = "index.html")
 
 def create_db_from_file(uploaded_file):
-    docs = load_split_pdf_file(f'../data/{uploaded_file.filename}')
-    db = Chroma.from_documents(persist_directory="../data",
-                               documents=docs, 
-                               embedding=embedding)
+    docs = load_split_pdf_file(f'{docs_dir}/{uploaded_file.filename}')
+    db = Chroma.from_documents(persist_directory = db_dir,
+                               documents = docs, 
+                               embedding = embedding)
     
 @app.post("/")
 def upload_pdf_file(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
     if file.filename.endswith('.pdf'):
         contents = file.file.read()
-        with open(f'../data/{file.filename}', 'wb') as f:
+        with open(f'{docs_dir}/{file.filename}', 'wb') as f:
             f.write(contents)
         file.file.close()
     background_tasks.add_task(create_db_from_file, file)
-    return RedirectResponse(url="/chatting",
-                            status_code=status.HTTP_303_SEE_OTHER, 
-                            background=background_tasks)
+    return RedirectResponse(url = "/chatting",
+                            status_code = status.HTTP_303_SEE_OTHER, 
+                            background = background_tasks)
 
-@app.get("/chatting", response_class=HTMLResponse)
+@app.get("/chatting", response_class = HTMLResponse)
 def return_homepage(request: Request):
-    return templates.TemplateResponse(request=request, name="chatting.html")
+    return templates.TemplateResponse(request = request, name = "chatting.html")
 
 @app.websocket("/chatting")
 async def websocket_chat(websocket: WebSocket):
@@ -52,7 +57,7 @@ async def websocket_chat(websocket: WebSocket):
     while True:
         user_input = await websocket.receive_text()
         
-        db = Chroma(persist_directory="../data", embedding_function=embedding)
+        db = Chroma(persist_directory = db_dir, embedding_function = embedding)
         retriever = db.as_retriever()
 
         history_aware_retriever = build_history_aware_retriever(llm, retriever)
